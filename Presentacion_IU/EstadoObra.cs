@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace Presentacion_IU
 {
-    internal class EstadoObra
+    /*
+    Trabajo con enum -> los estados son cerrados y simples. 
+    No necesitamos que “Estado” tenga comportamiento propio; 
+    solamente queremos impedir valores inválidos. 
+    */
+    public enum EstadoObra
     {
+        PENDIENTE,
+        EN_EJECUCION,
+        FINALIZADA
     }
 }

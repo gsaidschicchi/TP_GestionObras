@@ -27,5 +27,12 @@ namespace Presentacion_IU
             Legajo = legajo;
             Especialidad = especialidad;
         }
+
+        // constructor sin parametros
+        public ClsOperario() : base(string.Empty, string.Empty, string.Empty, string.Empty)
+        {
+            Legajo = 0;
+            Especialidad = string.Empty;
+        }
     }
 }
