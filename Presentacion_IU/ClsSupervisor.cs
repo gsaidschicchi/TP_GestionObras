@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Presentacion_IU
 {
@@ -21,7 +17,7 @@ namespace Presentacion_IU
             Sector = sector;
         }
 
-        // constructor sin parámetros que inicializa la base con valores vacíos
+        // Constructor sin parámetros
         public ClsSupervisor()
             : base(string.Empty, string.Empty, string.Empty, string.Empty)
         {
@@ -30,10 +26,41 @@ namespace Presentacion_IU
         }
 
         // METODOS
-        public override string MostrarDatos()
+        public void SupervisarObra(ClsObra obra)
         {
-            return $"DNI: {DNI}, Nombre: {Nombre}, Apellido: {Apellido}," +
-                   $"Telefono: {Telefono}, IdSupervisor: {IdSupervisor}, Sector: {Sector}.";
+            if (obra == null)
+            {
+                throw new Exception("La obra no puede ser nula.");
+            }
+
+            if (obra.Estado != EstadoObra.FINALIZADA)
+            {
+                throw new Exception("La obra debe finalizarse por la Contratista antes de ser supervisada.");
+            }
+
+            if (!obra.InformadaAlSupervisor)
+            {
+                throw new Exception("La obra todavía no fue informada por la Contratista al Supervisor.");
+            }
+
+            if (obra.EstadoSupervision != EstadoSupervision.PENDIENTE)
+            {
+                throw new Exception("La obra no se encuentra pendiente de supervisión.");
+            }
+        }
+
+        public void AprobarObra(ClsObra obra)
+        {
+            SupervisarObra(obra);
+
+            obra.CambiarEstadoSupervision(EstadoSupervision.APROBADO);
+        }
+
+        public void RechazarObra(ClsObra obra)
+        {
+            SupervisarObra(obra);
+
+            obra.CambiarEstadoSupervision(EstadoSupervision.RECHAZADO);
         }
     }
 }

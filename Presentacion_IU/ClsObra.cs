@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presentacion_IU
 {
-    internal class ClsObra
+    public class ClsObra
     {
         // PROPIEDADES
         public int? Codigo { get; set; }
@@ -14,29 +14,41 @@ namespace Presentacion_IU
         public string Direccion { get; set; }
         public EstadoObra Estado { get; set; }
         public EstadoSupervision EstadoSupervision { get; set; }
+        public bool InformadaAlSupervisor { get; set; }
 
         // CONSTRUCTOR
-
         public ClsObra(int codigo, string nombre, string direccion)
         {
             Codigo = codigo;
             Nombre = nombre;
             Direccion = direccion;
-            Estado = EstadoObra.PENDIENTE; // al crear la obra, se crea con estado de obra pendiente
-            EstadoSupervision = EstadoSupervision.PENDIENTE; // al crear la obra, se crea con estado de supervision pendiente
+
+            Estado = EstadoObra.PENDIENTE;
+            EstadoSupervision = EstadoSupervision.PENDIENTE;
+            InformadaAlSupervisor = false;
         }
 
-        // constructor sin parametros
-
+        // CONSTRUCTOR SIN PARAMETROS
         public ClsObra()
         {
             Codigo = null;
             Nombre = string.Empty;
             Direccion = string.Empty;
-            Estado = EstadoObra.PENDIENTE; // al crear la obra, se crea con estado de obra pendiente
-            EstadoSupervision = EstadoSupervision.PENDIENTE; // al crear la obra, se crea con estado de supervision pendiente
+
+            Estado = EstadoObra.PENDIENTE;
+            EstadoSupervision = EstadoSupervision.PENDIENTE;
+            InformadaAlSupervisor = false;
         }
 
         // METODOS
+        public void CambiarEstadoObra(EstadoObra nuevoEstado)
+        {
+            Estado = nuevoEstado;
+        }
+
+        public void CambiarEstadoSupervision(EstadoSupervision nuevoEstado)
+        {
+            EstadoSupervision = nuevoEstado;
+        }
     }
 }

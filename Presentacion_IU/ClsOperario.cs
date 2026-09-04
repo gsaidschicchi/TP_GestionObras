@@ -13,11 +13,7 @@ namespace Presentacion_IU
         public string Especialidad { get; set; }
 
         // METODOS
-        public override string MostrarDatos()
-        {
-            return $"DNI: {DNI}, Nombre: {Nombre}, Apellido: {Apellido}, " + 
-            $"Telefono: {Telefono}, Legajo: {Legajo}, Especialidad: {Especialidad}";
-        }
+
 
         // CONSTRUCTOR
         public ClsOperario(string dni, string nombre, string apellido, string telefono,

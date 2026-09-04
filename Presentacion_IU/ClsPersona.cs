@@ -15,9 +15,6 @@ namespace Presentacion_IU
         public string Apellido { get; set; }
         public string Telefono { get; set; }
 
-        // METODOS
-        public abstract string MostrarDatos();
-
         // CONSTRUCTOR
         public ClsPersona(string dni, string nombre, string apellido, string telefono)
         {
