@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="BE_GestionObras/BE_GestionObras.csproj" Id="18946e69-bb6e-47f8-a89a-eb9e86e818a2" />
   <Project Path="BLL_GestionObras/BLL_GestionObras.csproj" Id="f3994cfb-2350-4905-97dd-fe7294bb560b" />
+  <Project Path="DAL_GestionObras/DAL_GestionObras.csproj" Id="9a9bb6be-bc78-4e7f-aa5c-76fb66f9cb7a" />
   <Project Path="Presentacion_IU/Presentacion_IU.csproj" Id="bc46f154-1afa-46f7-ac53-ec73ea6f35a8" />
 </Solution>

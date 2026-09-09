@@ -46,18 +46,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClsContratista.cs" />
-    <Compile Include="ClsCuadrilla.cs" />
-    <Compile Include="ClsObra.cs" />
-    <Compile Include="ClsOperario.cs" />
-    <Compile Include="ClsPersona.cs" />
-    <Compile Include="ClsSupervisor.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="FrmContratistas.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="FrmCuadrillas.cs">
+      <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FrmObras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmOperarios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSupervision.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ContextoAplicacion.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -81,6 +88,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BE_GestionObras\BE_GestionObras.csproj">
+      <Project>{18946e69-bb6e-47f8-a89a-eb9e86e818a2}</Project>
+      <Name>BE_GestionObras</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BLL_GestionObras\BLL_GestionObras.csproj">
+      <Project>{f3994cfb-2350-4905-97dd-fe7294bb560b}</Project>
+      <Name>BLL_GestionObras</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL_GestionObras\DAL_GestionObras.csproj">
+      <Project>{9a9bb6be-bc78-4e7f-aa5c-76fb66f9cb7a}</Project>
+      <Name>DAL_GestionObras</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

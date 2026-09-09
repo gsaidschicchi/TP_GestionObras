@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace BE_GestionObras
 {
     public class BEClsSupervisor : BEClsPersona
@@ -12,7 +6,7 @@ namespace BE_GestionObras
         public int IdSupervisor { get; set; }
         public string Sector { get; set; }
 
-        // CONSTRUCTORES
+        // CONSTRUCTOR EXISTENTE - se mantiene.
         public BEClsSupervisor(string dni, string nombre, string apellido, string telefono,
                              int idSupervisor, string sector)
             : base(dni, nombre, apellido, telefono)
@@ -21,12 +15,26 @@ namespace BE_GestionObras
             Sector = sector;
         }
 
-        // Constructor sin parámetros
-        public BEClsSupervisor()
-            : base(string.Empty, string.Empty, string.Empty, string.Empty)
+        // CONSTRUCTOR SOBRECARGADO con IdCodigo y SueldoBase.
+        public BEClsSupervisor(string idCodigo, string dni, string nombre, string apellido,
+                              string telefono, double sueldoBase, int idSupervisor, string sector)
+            : base(idCodigo, dni, nombre, apellido, telefono, sueldoBase)
+        {
+            IdSupervisor = idSupervisor;
+            Sector = sector;
+        }
+
+        // CONSTRUCTOR SIN PARAMETROS
+        public BEClsSupervisor() : base()
         {
             IdSupervisor = 0;
             Sector = string.Empty;
+        }
+
+        // POLIMORFISMO: el Supervisor calcula su sueldo con un 50% adicional.
+        public override double CalcularSueldo()
+        {
+            return SueldoBase * 1.5;
         }
     }
 }

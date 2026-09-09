@@ -1,0 +1,35 @@
+CAMBIOS APLICADOS DESPUÉS DE LA CORRECCIÓN DEL PROFESOR
+
+1. FrmPrincipal
+   - Se reemplazó el panel de botones por MenuStrip.
+   - Se mantiene como MDI Parent.
+   - Menús: Archivo, Gestión y Supervisión.
+
+2. BEClsPersona
+   - DNI se conserva como dato, pero deja de considerarse PK.
+   - Se agregó IdCodigo (string).
+   - Se agregó SueldoBase (double).
+   - Se agregó el método abstracto CalcularSueldo().
+   - Se mantuvo el constructor existente y se agregó un constructor sobrecargado.
+
+3. BEClsOperario
+   - Se mantienen Legajo, Especialidad y constructores existentes.
+   - Se agregó override CalcularSueldo(): SueldoBase * 1.2.
+   - Se agregó constructor sobrecargado sin eliminar el anterior.
+
+4. BEClsSupervisor
+   - Se mantienen IdSupervisor, Sector y constructores existentes.
+   - Se agregó override CalcularSueldo(): SueldoBase * 1.5.
+   - Se agregó constructor sobrecargado sin eliminar el anterior.
+
+5. Relación Supervisor - Obra
+   - No se agregó ninguna propiedad Obra dentro de Supervisor.
+   - Los métodos BLL que reciben una obra por parámetro se mantienen, porque eso es una colaboración temporal y no una asociación estructural.
+
+6. IdCodigo automático
+   - Hasta implementar MPP/DAL/BD, ContextoAplicacion genera temporalmente 000001, 000002, etc.
+   - FrmOperarios muestra IdCodigo como solo lectura.
+   - Esta responsabilidad deberá migrar a persistencia cuando se implemente la base de datos.
+
+7. Funciones BLL existentes
+   - No se modificó la lógica de las funciones existentes de BLLClsCuadrilla, BLLClsContratista, BLLClsObra ni BLLClsSupervisor.

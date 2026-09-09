@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Presentacion_IU
+namespace BLL_GestionObras
 {
-    public abstract class ClsPersona
+    internal class BLLClsPersona
     {
-
     }
 }
