@@ -5,8 +5,13 @@ using System.Collections.Generic;
 
 namespace BLL_GestionObras
 {
-    public class BLLClsOperario
+    public class BLLClsOperario : BLLClsPersona
     {
+        public override double CalcularSueldo(BEClsPersona persona)
+        {
+            return persona.CalcularSueldo();
+        }
+
         public bool CrearOperario(BEClsOperario operario)
         {
             if (operario == null)

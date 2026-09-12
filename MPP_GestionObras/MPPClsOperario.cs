@@ -3,6 +3,7 @@ using DAL_GestionObras;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,7 +60,7 @@ namespace MPP_GestionObras
                 "'" + operario.Nombre + "', " +
                 "'" + operario.Apellido + "', " +
                 "'" + operario.Telefono + "', " +
-                operario.SueldoBase + ", " +
+                operario.SueldoBase.ToString(CultureInfo.InvariantCulture) + ", " +
                 operario.Legajo + ", " +
                 "'" + operario.Especialidad + "')";
 
@@ -77,7 +78,7 @@ namespace MPP_GestionObras
                 "Nombre = '" + operario.Nombre + "', " +
                 "Apellido = '" + operario.Apellido + "', " +
                 "Telefono = '" + operario.Telefono + "', " +
-                "SueldoBase = " + operario.SueldoBase + ", " +
+                "SueldoBase = " + operario.SueldoBase.ToString(CultureInfo.InvariantCulture) + ", " +
                 "Legajo = " + operario.Legajo + ", " +
                 "Especialidad = '" + operario.Especialidad + "' " +
                 "WHERE IdCodigo = '" + operario.IdCodigo + "'";
@@ -89,11 +90,15 @@ namespace MPP_GestionObras
         {
             DALAcceso acceso = new DALAcceso();
 
-            string consulta =
+            string consultaRelaciones =
+                "DELETE FROM Cuadrilla_Operario " +
+                "WHERE IdCodigoOperario = '" + operario.IdCodigo + "'";
+
+            string consultaOperario =
                 "DELETE FROM Operario " +
                 "WHERE IdCodigo = '" + operario.IdCodigo + "'";
 
-            return acceso.Escribir(consulta);
+            return acceso.EscribirTransaccion(consultaRelaciones, consultaOperario);
         }
 
         public bool BuscarOperario(BEClsOperario operario)

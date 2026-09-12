@@ -124,7 +124,7 @@ namespace Presentacion_IU
                     txtIdCodigo.Text = bllOperario.GenerarIdCodigo();
 
                     MessageBox.Show("Operario creado correctamente. Sueldo calculado: " +
-                                    operario.CalcularSueldo().ToString("0.00"));
+                                    bllOperario.CalcularSueldo(operario).ToString("0.00"));
                 }
             }
             catch (Exception ex)
@@ -194,7 +194,7 @@ namespace Presentacion_IU
                     operario.IdCodigo + " - " +
                     operario.Legajo + " - " +
                     operario.Nombre + " " + operario.Apellido +
-                    " | Sueldo: " + operario.CalcularSueldo().ToString("0.00"));
+                    " | Sueldo: " + bllOperario.CalcularSueldo(operario).ToString("0.00"));
             }
         }
 

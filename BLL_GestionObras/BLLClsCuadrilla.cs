@@ -7,6 +7,8 @@ namespace BLL_GestionObras
 {
     public class BLLClsCuadrilla
     {
+        #region ABM Cuadrilla
+
         public bool CrearCuadrilla(BEClsCuadrilla cuadrilla)
         {
             if (cuadrilla == null)
@@ -61,6 +63,10 @@ namespace BLL_GestionObras
             MPPClsCuadrilla mpp = new MPPClsCuadrilla();
             return mpp.EliminarCuadrilla(cuadrilla);
         }
+
+        #endregion
+
+        #region Gestión de Cuadrilla
 
         public List<BEClsOperario> AgregarOperario(BEClsCuadrilla cuadrilla, BEClsOperario operario)
         {
@@ -273,5 +279,6 @@ namespace BLL_GestionObras
             MPPClsCuadrilla mpp = new MPPClsCuadrilla();
             return mpp.ListarTodo();
         }
+        #endregion
     }
 }

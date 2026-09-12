@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BE_GestionObras;
 
 namespace BLL_GestionObras
 {
-    internal class BLLClsPersona
+    public abstract class BLLClsPersona
     {
+        public abstract double CalcularSueldo(BEClsPersona persona);
     }
 }

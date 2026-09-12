@@ -15,9 +15,11 @@ namespace MPP_GestionObras
         {
             DALAcceso acceso = new DALAcceso();
 
+            string usuarioSeguro = usuario.Usuario.Replace("'", "''");
+
             string consulta =
                 "SELECT * FROM Usuario " +
-                "WHERE Usuario = '" + usuario.Usuario + "' " +
+                "WHERE Usuario = '" + usuarioSeguro + "' " +
                 "AND Password = '" + usuario.Password + "'";
 
             DataTable tabla = acceso.Leer(consulta);

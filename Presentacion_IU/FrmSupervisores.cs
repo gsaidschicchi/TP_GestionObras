@@ -1,4 +1,4 @@
-using BE_GestionObras;
+﻿using BE_GestionObras;
 using BLL_GestionObras;
 using System;
 using System.Collections.Generic;
@@ -34,6 +34,9 @@ namespace Presentacion_IU
             titulo.Location = new Point(30, 20);
 
             CrearCampo("Id Código:", 80, out txtIdCodigo);
+            txtIdCodigo.ReadOnly = true;
+            txtIdCodigo.Text = bllSupervisor.GenerarIdCodigo();
+
             CrearCampo("DNI:", 120, out txtDNI);
             CrearCampo("Nombre:", 160, out txtNombre);
             CrearCampo("Apellido:", 200, out txtApellido);
@@ -115,7 +118,9 @@ namespace Presentacion_IU
                 if (bllSupervisor.CrearSupervisor(supervisor))
                 {
                     RefrescarLista();
-                    MessageBox.Show("Supervisor creado correctamente.");
+                    txtIdCodigo.Text = bllSupervisor.GenerarIdCodigo();
+                    MessageBox.Show("Supervisor creado correctamente. Sueldo calculado: " +
+                                    bllSupervisor.CalcularSueldo(supervisor).ToString("0.00"));
                 }
             }
             catch (Exception ex)
@@ -158,6 +163,7 @@ namespace Presentacion_IU
                 if (bllSupervisor.EliminarSupervisor(supervisor))
                 {
                     RefrescarLista();
+                    txtIdCodigo.Text = bllSupervisor.GenerarIdCodigo();
                     MessageBox.Show("Supervisor eliminado correctamente.");
                 }
             }
@@ -177,7 +183,8 @@ namespace Presentacion_IU
                 lstSupervisores.Items.Add(
                     supervisor.IdCodigo + " - " +
                     supervisor.Nombre + " " + supervisor.Apellido +
-                    " | " + supervisor.Sector);
+                    " | " + supervisor.Sector +
+                    " | Sueldo: " + bllSupervisor.CalcularSueldo(supervisor).ToString("0.00"));
             }
         }
 

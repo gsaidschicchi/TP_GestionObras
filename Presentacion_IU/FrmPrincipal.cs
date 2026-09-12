@@ -17,9 +17,13 @@ namespace Presentacion_IU
             ToolStripMenuItem menuArchivo = new ToolStripMenuItem("Archivo");
             ToolStripMenuItem menuGestion = new ToolStripMenuItem("Gestión");
             ToolStripMenuItem menuSupervision = new ToolStripMenuItem("Supervisión");
+            ToolStripMenuItem menuReportes = new ToolStripMenuItem("Reportes");
+
+            ToolStripMenuItem itemCerrarSesion = new ToolStripMenuItem("Cerrar sesión");
+            itemCerrarSesion.Click += (s, e) => { this.DialogResult = DialogResult.OK; this.Close(); };
 
             ToolStripMenuItem itemSalir = new ToolStripMenuItem("Salir");
-            itemSalir.Click += (s, e) => Application.Exit();
+            itemSalir.Click += (s, e) => { this.DialogResult = DialogResult.Cancel; this.Close(); };
 
             ToolStripMenuItem itemContratistas = new ToolStripMenuItem("Contratistas");
             ToolStripMenuItem itemCuadrillas = new ToolStripMenuItem("Cuadrillas");
@@ -27,6 +31,7 @@ namespace Presentacion_IU
             ToolStripMenuItem itemObras = new ToolStripMenuItem("Obras");
             ToolStripMenuItem itemSupervisores = new ToolStripMenuItem("Supervisores");
             ToolStripMenuItem itemSupervision = new ToolStripMenuItem("Supervisión de Obras");
+            ToolStripMenuItem itemReporteObras = new ToolStripMenuItem("Reporte de Obras");
 
             itemContratistas.Click += (s, e) => AbrirFormulario(new FrmContratistas());
             itemCuadrillas.Click += (s, e) => AbrirFormulario(new FrmCuadrillas());
@@ -34,7 +39,9 @@ namespace Presentacion_IU
             itemObras.Click += (s, e) => AbrirFormulario(new FrmObras());
             itemSupervisores.Click += (s, e) => AbrirFormulario(new FrmSupervisores());
             itemSupervision.Click += (s, e) => AbrirFormulario(new FrmSupervision());
+            itemReporteObras.Click += (s, e) => AbrirFormulario(new FrmReporteObras());
 
+            menuArchivo.DropDownItems.Add(itemCerrarSesion);
             menuArchivo.DropDownItems.Add(itemSalir);
 
             menuGestion.DropDownItems.Add(itemContratistas);
@@ -44,10 +51,12 @@ namespace Presentacion_IU
             menuGestion.DropDownItems.Add(itemSupervisores);
 
             menuSupervision.DropDownItems.Add(itemSupervision);
+            menuReportes.DropDownItems.Add(itemReporteObras);
 
             menuPrincipal.Items.Add(menuArchivo);
             menuPrincipal.Items.Add(menuGestion);
             menuPrincipal.Items.Add(menuSupervision);
+            menuPrincipal.Items.Add(menuReportes);
 
             this.MainMenuStrip = menuPrincipal;
             this.Controls.Add(menuPrincipal);

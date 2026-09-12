@@ -3,6 +3,7 @@ using DAL_GestionObras;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 
 namespace MPP_GestionObras
 {
@@ -54,7 +55,7 @@ namespace MPP_GestionObras
                 "'" + supervisor.Nombre + "', " +
                 "'" + supervisor.Apellido + "', " +
                 "'" + supervisor.Telefono + "', " +
-                supervisor.SueldoBase + ", " +
+                supervisor.SueldoBase.ToString(CultureInfo.InvariantCulture) + ", " +
                 supervisor.IdSupervisor + ", " +
                 "'" + supervisor.Sector + "')";
 
@@ -91,7 +92,7 @@ namespace MPP_GestionObras
                 "Nombre = '" + supervisor.Nombre + "', " +
                 "Apellido = '" + supervisor.Apellido + "', " +
                 "Telefono = '" + supervisor.Telefono + "', " +
-                "SueldoBase = " + supervisor.SueldoBase + ", " +
+                "SueldoBase = " + supervisor.SueldoBase.ToString(CultureInfo.InvariantCulture) + ", " +
                 "IdSupervisor = " + supervisor.IdSupervisor + ", " +
                 "Sector = '" + supervisor.Sector + "' " +
                 "WHERE IdCodigo = '" + supervisor.IdCodigo + "'";

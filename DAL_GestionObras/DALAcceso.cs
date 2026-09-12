@@ -46,61 +46,112 @@ namespace DAL_GestionObras
 
         public void CerrarConexion()
         {
+            conexion.Close();
 
             System.Diagnostics.Debug.WriteLine(
                 "Conexión cerrada correctamente. Estado: " + conexion.State
             );
-
-            conexion.Close();
         }
 
         public DataTable Leer(string consulta)
         {
-            // Creo un comando SQL
             SqlCommand comando = new SqlCommand();
-
-            // Le digo qué consulta ejecutar
-            comando.CommandText = consulta;
-
-            // Le indico con qué conexión debe ejecutarla
-            comando.Connection = AbrirConexion();
-
-            // Creo un adaptador que ejecutará el comando
-            // y traerá los resultados
-            SqlDataAdapter adaptador = new SqlDataAdapter(comando);
-
-            // Creo una tabla vacía en memoria
             DataTable tabla = new DataTable();
 
-            // Lleno esa tabla con lo que devolvió SQL Server
-            adaptador.Fill(tabla);
+            try
+            {
+                comando.CommandText = consulta;
+                comando.Connection = AbrirConexion();
 
-            // Cierro la conexión
-            CerrarConexion();
+                SqlDataAdapter adaptador = new SqlDataAdapter(comando);
+                adaptador.Fill(tabla);
+            }
+            finally
+            {
+                if (conexion.State == ConnectionState.Open)
+                {
+                    CerrarConexion();
+                }
+            }
 
-            // Devuelvo los datos
             return tabla;
         }
 
         public bool Escribir(string consulta)
         {
             bool resultadoOperacion = false;
-
             SqlCommand comando = new SqlCommand();
 
-            comando.CommandText = consulta;
-            comando.Connection = AbrirConexion();
-
-            int filasAfectadas = comando.ExecuteNonQuery();
-
-            if (filasAfectadas > 0)
+            try
             {
-                resultadoOperacion = true;
+                comando.CommandText = consulta;
+                comando.Connection = AbrirConexion();
+
+                int filasAfectadas = comando.ExecuteNonQuery();
+
+                if (filasAfectadas > 0)
+                {
+                    resultadoOperacion = true;
+                }
+            }
+            finally
+            {
+                if (conexion.State == ConnectionState.Open)
+                {
+                    CerrarConexion();
+                }
             }
 
-            CerrarConexion();
-
             return resultadoOperacion;
+        }
+
+        public bool EscribirTransaccion(string consulta1, string consulta2)
+        {
+            SqlTransaction transaccion = null;
+
+            try
+            {
+                SqlConnection conexionAbierta = AbrirConexion();
+                transaccion = conexionAbierta.BeginTransaction();
+
+                SqlCommand comando1 = new SqlCommand();
+                comando1.CommandText = consulta1;
+                comando1.Connection = conexionAbierta;
+                comando1.Transaction = transaccion;
+                comando1.ExecuteNonQuery();
+
+                SqlCommand comando2 = new SqlCommand();
+                comando2.CommandText = consulta2;
+                comando2.Connection = conexionAbierta;
+                comando2.Transaction = transaccion;
+                int filasAfectadas = comando2.ExecuteNonQuery();
+
+                transaccion.Commit();
+                CerrarConexion();
+
+                if (filasAfectadas > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                if (transaccion != null)
+                {
+                    transaccion.Rollback();
+                }
+
+                if (conexion.State == ConnectionState.Open)
+                {
+                    CerrarConexion();
+                }
+
+                throw;
+            }
         }
     }
 }

@@ -62,7 +62,7 @@ namespace MPP_GestionObras
             string consulta = "INSERT INTO Obra " +
                 "(Codigo, Nombre, Direccion, Estado, EstadoSupervision, InformadaAlSupervisor) " +
                 "VALUES (" +
-                "'" + obra.Codigo + "', " +
+                obra.Codigo + ", " +
                 "'" + obra.Nombre + "', " +
                 "'" + obra.Direccion + "', " +
                 "'" + obra.Estado + "', " +
@@ -77,7 +77,7 @@ namespace MPP_GestionObras
             DALAcceso acceso = new DALAcceso();
 
             string consulta = "SELECT * FROM Obra " +
-                "WHERE Codigo = '" + obra.Codigo + "'";
+                "WHERE Codigo = " + obra.Codigo;
 
             DataTable tabla = acceso.Leer(consulta);
 

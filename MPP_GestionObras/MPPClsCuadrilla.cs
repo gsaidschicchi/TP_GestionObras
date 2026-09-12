@@ -8,6 +8,8 @@ namespace MPP_GestionObras
 {
     public class MPPClsCuadrilla
     {
+        #region Lectura y Mapeo
+
         public List<BEClsCuadrilla> ListarTodo()
         {
             DALAcceso acceso = new DALAcceso();
@@ -103,6 +105,10 @@ namespace MPP_GestionObras
 
             return operarios;
         }
+
+        #endregion
+
+        #region Persistencia
 
         public bool CrearCuadrilla(BEClsCuadrilla cuadrilla)
         {
@@ -271,5 +277,6 @@ namespace MPP_GestionObras
 
             return acceso.Escribir(consulta);
         }
+        #endregion
     }
 }

@@ -5,8 +5,13 @@ using System.Collections.Generic;
 
 namespace BLL_GestionObras
 {
-    public class BLLClsSupervisor
+    public class BLLClsSupervisor : BLLClsPersona
     {
+        public override double CalcularSueldo(BEClsPersona persona)
+        {
+            return persona.CalcularSueldo();
+        }
+
         public bool CrearSupervisor(BEClsSupervisor supervisor)
         {
             if (supervisor == null)
@@ -89,6 +94,30 @@ namespace BLL_GestionObras
 
             BLLClsObra bllObra = new BLLClsObra();
             bllObra.CambiarEstadoSupervision(obra, EstadoSupervision.RECHAZADO);
+        }
+
+        public string GenerarIdCodigo()
+        {
+            MPPClsSupervisor mpp = new MPPClsSupervisor();
+            List<BEClsSupervisor> supervisores = mpp.ListarTodo();
+
+            int mayor = 0;
+
+            foreach (BEClsSupervisor supervisor in supervisores)
+            {
+                int codigo = 0;
+
+                if (int.TryParse(supervisor.IdCodigo, out codigo))
+                {
+                    if (codigo > mayor)
+                    {
+                        mayor = codigo;
+                    }
+                }
+            }
+
+            int siguiente = mayor + 1;
+            return siguiente.ToString("D6");
         }
     }
 }

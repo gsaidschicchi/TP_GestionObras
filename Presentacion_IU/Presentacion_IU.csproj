@@ -64,6 +64,9 @@
     <Compile Include="FrmOperarios.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FrmReporteObras.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FrmPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,10 +114,6 @@
     <ProjectReference Include="..\BLL_GestionObras\BLL_GestionObras.csproj">
       <Project>{f3994cfb-2350-4905-97dd-fe7294bb560b}</Project>
       <Name>BLL_GestionObras</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Security_GestionObras\Security_GestionObras.csproj">
-      <Project>{af3c89bb-314d-4b9c-806b-7423c1e51864}</Project>
-      <Name>Security_GestionObras</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

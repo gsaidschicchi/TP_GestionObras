@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BE_GestionObras;
 using BLL_GestionObras;
-using Security_GestionObras;
 
 namespace Presentacion_IU
 {
@@ -22,24 +21,43 @@ namespace Presentacion_IU
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            BEClsUsuario usuario = new BEClsUsuario();
-
-            usuario.Usuario = txtUsuario.Text;
-            usuario.Password = txtPassword.Text;
-
-            BLLClsUsuario bll = new BLLClsUsuario();
-            bool resultado = bll.ValidarUsuario(usuario);
-
-            if (resultado)
+            try
             {
-                this.Hide();
+                BEClsUsuario usuario = new BEClsUsuario();
 
-                FrmPrincipal principal = new FrmPrincipal();
-                principal.Show();
+                usuario.Usuario = txtUsuario.Text;
+                usuario.Password = txtPassword.Text;
+
+                BLLClsUsuario bll = new BLLClsUsuario();
+                bool resultado = bll.ValidarUsuario(usuario);
+
+                if (resultado)
+                {
+                    this.Hide();
+
+                    FrmPrincipal principal = new FrmPrincipal();
+                    DialogResult resultadoPrincipal = principal.ShowDialog();
+
+                    if (resultadoPrincipal == DialogResult.Cancel)
+                    {
+                        this.Close();
+                        return;
+                    }
+
+                    txtPassword.Clear();
+                    this.Show();
+                    txtUsuario.Focus();
+                }
+                else
+                {
+                    MessageBox.Show("Usuario o contraseña incorrectos.");
+                    txtPassword.Clear();
+                    txtPassword.Focus();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Usuario o contraseña incorrectos.");
+                MessageBox.Show(ex.Message);
             }
         }
     }
