@@ -1,6 +1,8 @@
 ﻿using BE_GestionObras;
+using MPP_GestionObras;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace BLL_GestionObras
 {
@@ -25,8 +27,14 @@ namespace BLL_GestionObras
                 throw new Exception("El operario ya se encuentra en la cuadrilla.");
             }
 
-            cuadrilla.Operarios.Add(operario);
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
+            
+            bool resultado = mpp.AgregarOperario(cuadrilla, operario);
 
+            if (resultado)
+            {
+                cuadrilla.Operarios.Add(operario);
+            }
             return cuadrilla.Operarios;
         }
 
@@ -42,19 +50,22 @@ namespace BLL_GestionObras
                 throw new Exception("El operario no puede ser nulo.");
             }
 
-            if (BuscarOperario(cuadrilla, operario))
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
+
+            bool resultado = false;
+
+            resultado = mpp.QuitarOperario(cuadrilla, operario);
+            resultado = mpp.BuscarOperario(cuadrilla, operario);
+
+            if (resultado)
             {
                 cuadrilla.Operarios.Remove(operario);
-            }
-            else
-            {
-                throw new Exception("El operario no se encuentra en la cuadrilla.");
             }
 
             return cuadrilla.Operarios;
         }
 
-        public void AsignarObra(BEClsCuadrilla cuadrilla, BEClsObra obra)
+        public bool AsignarObra(BEClsCuadrilla cuadrilla, BEClsObra obra)
         {
             if (cuadrilla == null)
             {
@@ -71,10 +82,19 @@ namespace BLL_GestionObras
                 throw new Exception("La cuadrilla ya tiene una obra asignada.");
             }
 
-            cuadrilla.ObraAsignada = obra;
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
+
+            bool resultado = mpp.AsignarObra(cuadrilla, obra);
+
+            if(resultado == true)
+            {
+                cuadrilla.ObraAsignada = obra;
+            }
+
+            return resultado;
         }
 
-        public void DesasignarObra(BEClsCuadrilla cuadrilla, BEClsObra obra)
+        public bool DesasignarObra(BEClsCuadrilla cuadrilla, BEClsObra obra)
         {
             if (cuadrilla == null)
             {
@@ -96,10 +116,19 @@ namespace BLL_GestionObras
                 throw new Exception("La obra indicada no corresponde a la obra asignada a la cuadrilla.");
             }
 
-            cuadrilla.ObraAsignada = null;
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
+
+            bool resultado = mpp.DesasignarObra(cuadrilla);
+
+            if (resultado)
+            {
+                cuadrilla.ObraAsignada = null;
+            }
+
+            return resultado;
         }
 
-        public void IniciarObra(BEClsCuadrilla cuadrilla)
+        public bool IniciarObra(BEClsCuadrilla cuadrilla)
         {
             if (cuadrilla == null)
             {
@@ -126,7 +155,16 @@ namespace BLL_GestionObras
                 throw new Exception("La obra ya se encuentra iniciada.");
             }
 
-            cuadrilla.ObraAsignada.Estado = EstadoObra.EN_EJECUCION;
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
+
+            bool resultado = mpp.IniciarObra(cuadrilla);
+
+            if (resultado)
+            {
+                cuadrilla.ObraAsignada.Estado = EstadoObra.EN_EJECUCION;
+            }
+
+            return resultado;
         }
 
         public void InformarFinalizacionObra(BEClsCuadrilla cuadrilla)
@@ -158,20 +196,15 @@ namespace BLL_GestionObras
 
         public bool BuscarOperario(BEClsCuadrilla cuadrilla, BEClsOperario operario)
         {
-            if (cuadrilla == null)
-            {
-                throw new Exception("La cuadrilla no puede ser nula.");
-            }
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
 
-            foreach (BEClsOperario o in cuadrilla.Operarios)
-            {
-                if (o == operario)
-                {
-                    return true;
-                }
-            }
+            return mpp.BuscarOperario(cuadrilla, operario);
+        }
 
-            return false;
+        public List<BEClsCuadrilla> ListarTodo()
+        {
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
+            return mpp.ListarTodo();
         }
     }
 }

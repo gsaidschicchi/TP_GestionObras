@@ -44,6 +44,7 @@
     <Compile Include="BLLClsContratista.cs" />
     <Compile Include="BLLClsCuadrilla.cs" />
     <Compile Include="BLLClsObra.cs" />
+    <Compile Include="BLLClsOperario.cs" />
     <Compile Include="BLLClsSupervisor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -51,6 +52,10 @@
     <ProjectReference Include="..\BE_GestionObras\BE_GestionObras.csproj">
       <Project>{18946e69-bb6e-47f8-a89a-eb9e86e818a2}</Project>
       <Name>BE_GestionObras</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPP_GestionObras\MPP_GestionObras.csproj">
+      <Project>{647e8267-f734-481d-a871-56c58e087b12}</Project>
+      <Name>MPP_GestionObras</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

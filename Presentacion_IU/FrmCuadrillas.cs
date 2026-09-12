@@ -314,5 +314,29 @@ namespace Presentacion_IU
 
             lblEstado.Text = "Operarios: " + cuadrilla.Operarios.Count + " | Obra: " + obra;
         }
+
+        private void CargarCuadrillas()
+        {
+            //dgvCuadrillas.Data
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // FrmCuadrillas
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Name = "FrmCuadrillas";
+            this.Text = "con es";
+            this.Load += new System.EventHandler(this.FrmCuadrillas_Load);
+            this.ResumeLayout(false);
+
+        }
+
+        private void FrmCuadrillas_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
