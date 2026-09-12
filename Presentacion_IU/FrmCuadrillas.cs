@@ -1,7 +1,8 @@
-using BE_GestionObras;
+﻿using BE_GestionObras;
 using BLL_GestionObras;
 using System;
 using System.Drawing;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Presentacion_IU
@@ -9,6 +10,10 @@ namespace Presentacion_IU
     public class FrmCuadrillas : Form
     {
         private readonly BLLClsCuadrilla bllCuadrilla = new BLLClsCuadrilla();
+        private readonly BLLClsOperario bllOperario = new BLLClsOperario();
+
+        private List<BEClsCuadrilla> cuadrillas = new List<BEClsCuadrilla>();
+        private List<BEClsOperario> operarios = new List<BEClsOperario>();
 
         private TextBox txtCodigo;
         private TextBox txtNombre;
@@ -154,7 +159,7 @@ namespace Presentacion_IU
             if (cboCuadrillas.SelectedIndex < 0)
                 throw new Exception("Debe seleccionar una cuadrilla.");
 
-            return ContextoAplicacion.Cuadrillas[cboCuadrillas.SelectedIndex];
+            return cuadrillas[cboCuadrillas.SelectedIndex];
         }
 
         private BEClsOperario OperarioSeleccionado()
@@ -162,7 +167,7 @@ namespace Presentacion_IU
             if (cboOperarios.SelectedIndex < 0)
                 throw new Exception("Debe seleccionar un operario.");
 
-            return ContextoAplicacion.Operarios[cboOperarios.SelectedIndex];
+            return operarios[cboOperarios.SelectedIndex];
         }
 
         private BEClsObra ObraSeleccionada()
@@ -182,9 +187,13 @@ namespace Presentacion_IU
                     txtNombre.Text,
                     null);
 
-                ContextoAplicacion.Cuadrillas.Add(cuadrilla);
-                RefrescarCombos();
-                lstEventos.Items.Add("Cuadrilla creada: " + cuadrilla.Nombre);
+                bool resultado = bllCuadrilla.CrearCuadrilla(cuadrilla);
+
+                if (resultado)
+                {
+                    RefrescarCombos();
+                    lstEventos.Items.Add("Cuadrilla creada: " + cuadrilla.Nombre);
+                }
             }
             catch (Exception ex)
             {
@@ -198,7 +207,7 @@ namespace Presentacion_IU
             {
                 bllCuadrilla.AgregarOperario(CuadrillaSeleccionada(), OperarioSeleccionado());
                 lstEventos.Items.Add("Operario agregado a la cuadrilla.");
-                ActualizarEstado();
+                RefrescarCombos();
             }
             catch (Exception ex)
             {
@@ -212,7 +221,7 @@ namespace Presentacion_IU
             {
                 bllCuadrilla.QuitarOperario(CuadrillaSeleccionada(), OperarioSeleccionado());
                 lstEventos.Items.Add("Operario quitado de la cuadrilla.");
-                ActualizarEstado();
+                RefrescarCombos();
             }
             catch (Exception ex)
             {
@@ -226,7 +235,7 @@ namespace Presentacion_IU
             {
                 bllCuadrilla.AsignarObra(CuadrillaSeleccionada(), ObraSeleccionada());
                 lstEventos.Items.Add("Obra asignada a la cuadrilla.");
-                ActualizarEstado();
+                RefrescarCombos();
             }
             catch (Exception ex)
             {
@@ -241,7 +250,7 @@ namespace Presentacion_IU
                 BEClsCuadrilla cuadrilla = CuadrillaSeleccionada();
                 bllCuadrilla.DesasignarObra(cuadrilla, cuadrilla.ObraAsignada);
                 lstEventos.Items.Add("Obra desasignada de la cuadrilla.");
-                ActualizarEstado();
+                RefrescarCombos();
             }
             catch (Exception ex)
             {
@@ -255,7 +264,7 @@ namespace Presentacion_IU
             {
                 bllCuadrilla.IniciarObra(CuadrillaSeleccionada());
                 lstEventos.Items.Add("Obra iniciada.");
-                ActualizarEstado();
+                RefrescarCombos();
             }
             catch (Exception ex)
             {
@@ -269,7 +278,7 @@ namespace Presentacion_IU
             {
                 bllCuadrilla.InformarFinalizacionObra(CuadrillaSeleccionada());
                 lstEventos.Items.Add("Obra finalizada por la cuadrilla.");
-                ActualizarEstado();
+                RefrescarCombos();
             }
             catch (Exception ex)
             {
@@ -281,14 +290,18 @@ namespace Presentacion_IU
         {
             int cuadrillaSeleccionada = cboCuadrillas == null ? -1 : cboCuadrillas.SelectedIndex;
 
+            cuadrillas = bllCuadrilla.ListarTodo();
+            operarios = bllOperario.ListarTodo();
+
             cboCuadrillas.Items.Clear();
-            foreach (BEClsCuadrilla cuadrilla in ContextoAplicacion.Cuadrillas)
+            foreach (BEClsCuadrilla cuadrilla in cuadrillas)
                 cboCuadrillas.Items.Add(cuadrilla.Codigo + " - " + cuadrilla.Nombre);
 
             cboOperarios.Items.Clear();
-            foreach (BEClsOperario operario in ContextoAplicacion.Operarios)
+            foreach (BEClsOperario operario in operarios)
                 cboOperarios.Items.Add(operario.Legajo + " - " + operario.Nombre + " " + operario.Apellido);
 
+            // Obras queda temporalmente con ContextoAplicacion porque FrmObras lo vas a terminar vos.
             cboObras.Items.Clear();
             foreach (BEClsObra obra in ContextoAplicacion.Obras)
                 cboObras.Items.Add(obra.Codigo + " - " + obra.Nombre);
@@ -307,7 +320,7 @@ namespace Presentacion_IU
                 return;
             }
 
-            BEClsCuadrilla cuadrilla = ContextoAplicacion.Cuadrillas[cboCuadrillas.SelectedIndex];
+            BEClsCuadrilla cuadrilla = cuadrillas[cboCuadrillas.SelectedIndex];
             string obra = cuadrilla.ObraAsignada == null
                 ? "Sin obra asignada"
                 : cuadrilla.ObraAsignada.Nombre + " (" + cuadrilla.ObraAsignada.Estado + ")";

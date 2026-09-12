@@ -1,4 +1,5 @@
-using BE_GestionObras;
+﻿using BE_GestionObras;
+using BLL_GestionObras;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,6 +8,8 @@ namespace Presentacion_IU
 {
     public class FrmOperarios : Form
     {
+        private readonly BLLClsOperario bllOperario = new BLLClsOperario();
+
         private TextBox txtIdCodigo;
         private TextBox txtDNI;
         private TextBox txtNombre;
@@ -30,7 +33,7 @@ namespace Presentacion_IU
 
             CrearCampo("Id Código:", 80, out txtIdCodigo);
             txtIdCodigo.ReadOnly = true;
-            txtIdCodigo.Text = ContextoAplicacion.GenerarIdPersona();
+            txtIdCodigo.Text = bllOperario.GenerarIdCodigo();
 
             CrearCampo("DNI:", 120, out txtDNI);
             CrearCampo("Nombre:", 160, out txtNombre);
@@ -87,16 +90,18 @@ namespace Presentacion_IU
                 operario.IdCodigo = txtIdCodigo.Text;
                 operario.SueldoBase = double.Parse(txtSueldoBase.Text);
 
-                ContextoAplicacion.Operarios.Add(operario);
-                ContextoAplicacion.Personas.Add(operario);
+                bool resultado = bllOperario.CrearOperario(operario);
 
-                RefrescarLista();
+                if (resultado)
+                {
+                    RefrescarLista();
 
-                // Prepara el próximo código automático.
-                txtIdCodigo.Text = ContextoAplicacion.GenerarIdPersona();
+                    // Prepara el próximo código automático desde los datos persistidos.
+                    txtIdCodigo.Text = bllOperario.GenerarIdCodigo();
 
-                MessageBox.Show("Operario creado correctamente. Sueldo calculado: " +
-                                operario.CalcularSueldo().ToString("0.00"));
+                    MessageBox.Show("Operario creado correctamente. Sueldo calculado: " +
+                                    operario.CalcularSueldo().ToString("0.00"));
+                }
             }
             catch (Exception ex)
             {
@@ -109,7 +114,7 @@ namespace Presentacion_IU
             if (lstOperarios == null) return;
 
             lstOperarios.Items.Clear();
-            foreach (BEClsOperario operario in ContextoAplicacion.Operarios)
+            foreach (BEClsOperario operario in bllOperario.ListarTodo())
             {
                 lstOperarios.Items.Add(
                     operario.IdCodigo + " - " +

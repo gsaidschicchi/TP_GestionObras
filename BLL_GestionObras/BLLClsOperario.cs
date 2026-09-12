@@ -2,9 +2,6 @@
 using MPP_GestionObras;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL_GestionObras
 {
@@ -25,6 +22,36 @@ namespace BLL_GestionObras
             }
 
             return mpp.CrearOperario(operario);
+        }
+
+        public List<BEClsOperario> ListarTodo()
+        {
+            MPPClsOperario mpp = new MPPClsOperario();
+            return mpp.ListarTodo();
+        }
+
+        public string GenerarIdCodigo()
+        {
+            MPPClsOperario mpp = new MPPClsOperario();
+            List<BEClsOperario> operarios = mpp.ListarTodo();
+
+            int mayor = 0;
+
+            foreach (BEClsOperario operario in operarios)
+            {
+                int codigo = 0;
+
+                if (int.TryParse(operario.IdCodigo, out codigo))
+                {
+                    if (codigo > mayor)
+                    {
+                        mayor = codigo;
+                    }
+                }
+            }
+
+            int siguiente = mayor + 1;
+            return siguiente.ToString("D6");
         }
     }
 }

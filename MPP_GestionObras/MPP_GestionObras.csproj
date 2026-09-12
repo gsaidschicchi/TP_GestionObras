@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MPPClsCuadrilla.cs" />
+    <Compile Include="MPPClsObra.cs" />
     <Compile Include="MPPClsOperario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

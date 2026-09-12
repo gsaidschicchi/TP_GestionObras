@@ -1,6 +1,7 @@
-using BE_GestionObras;
+﻿using BE_GestionObras;
 using BLL_GestionObras;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,6 +10,9 @@ namespace Presentacion_IU
     public class FrmContratistas : Form
     {
         private readonly BLLClsContratista bllContratista = new BLLClsContratista();
+        private readonly BLLClsCuadrilla bllCuadrilla = new BLLClsCuadrilla();
+
+        private List<BEClsCuadrilla> cuadrillas = new List<BEClsCuadrilla>();
 
         private TextBox txtCUIT;
         private TextBox txtRazonSocial;
@@ -147,7 +151,7 @@ namespace Presentacion_IU
             if (cboCuadrillas.SelectedIndex < 0)
                 throw new Exception("Debe seleccionar una cuadrilla.");
 
-            return ContextoAplicacion.Cuadrillas[cboCuadrillas.SelectedIndex];
+            return cuadrillas[cboCuadrillas.SelectedIndex];
         }
 
         private BEClsObra ObraSeleccionada()
@@ -248,8 +252,10 @@ namespace Presentacion_IU
             foreach (BEClsContratista contratista in ContextoAplicacion.Contratistas)
                 cboContratistas.Items.Add(contratista.CUIT + " - " + contratista.RazonSocial);
 
+            cuadrillas = bllCuadrilla.ListarTodo();
+
             cboCuadrillas.Items.Clear();
-            foreach (BEClsCuadrilla cuadrilla in ContextoAplicacion.Cuadrillas)
+            foreach (BEClsCuadrilla cuadrilla in cuadrillas)
                 cboCuadrillas.Items.Add(cuadrilla.Codigo + " - " + cuadrilla.Nombre);
 
             cboObras.Items.Clear();

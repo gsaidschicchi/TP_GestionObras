@@ -101,10 +101,6 @@
       <Project>{f3994cfb-2350-4905-97dd-fe7294bb560b}</Project>
       <Name>BLL_GestionObras</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL_GestionObras\DAL_GestionObras.csproj">
-      <Project>{9a9bb6be-bc78-4e7f-aa5c-76fb66f9cb7a}</Project>
-      <Name>DAL_GestionObras</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
