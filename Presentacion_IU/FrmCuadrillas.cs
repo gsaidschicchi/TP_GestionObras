@@ -11,9 +11,11 @@ namespace Presentacion_IU
     {
         private readonly BLLClsCuadrilla bllCuadrilla = new BLLClsCuadrilla();
         private readonly BLLClsOperario bllOperario = new BLLClsOperario();
+        private readonly BLLClsObra bllObra = new BLLClsObra();
 
         private List<BEClsCuadrilla> cuadrillas = new List<BEClsCuadrilla>();
         private List<BEClsOperario> operarios = new List<BEClsOperario>();
+        private List<BEClsObra> obras = new List<BEClsObra>();
 
         private TextBox txtCodigo;
         private TextBox txtNombre;
@@ -56,6 +58,18 @@ namespace Presentacion_IU
             btnCrear.Size = new Size(150, 60);
             btnCrear.Click += btnCrear_Click;
 
+            Button btnModificarCuadrilla = new Button();
+            btnModificarCuadrilla.Text = "Modificar";
+            btnModificarCuadrilla.Location = new Point(540, 82);
+            btnModificarCuadrilla.Size = new Size(100, 28);
+            btnModificarCuadrilla.Click += btnModificarCuadrilla_Click;
+
+            Button btnEliminarCuadrilla = new Button();
+            btnEliminarCuadrilla.Text = "Eliminar";
+            btnEliminarCuadrilla.Location = new Point(540, 114);
+            btnEliminarCuadrilla.Size = new Size(100, 28);
+            btnEliminarCuadrilla.Click += btnEliminarCuadrilla_Click;
+
             Label lblSeleccion = new Label();
             lblSeleccion.Text = "Cuadrilla:";
             lblSeleccion.Location = new Point(30, 195);
@@ -64,7 +78,7 @@ namespace Presentacion_IU
             cboCuadrillas.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCuadrillas.Location = new Point(140, 192);
             cboCuadrillas.Width = 250;
-            cboCuadrillas.SelectedIndexChanged += (s, e) => ActualizarEstado();
+            cboCuadrillas.SelectedIndexChanged += cboCuadrillas_SelectedIndexChanged;
 
             Label lblOperario = new Label();
             lblOperario.Text = "Operario:";
@@ -135,6 +149,8 @@ namespace Presentacion_IU
             this.Controls.Add(lblNombre);
             this.Controls.Add(txtNombre);
             this.Controls.Add(btnCrear);
+            this.Controls.Add(btnModificarCuadrilla);
+            this.Controls.Add(btnEliminarCuadrilla);
             this.Controls.Add(lblSeleccion);
             this.Controls.Add(cboCuadrillas);
             this.Controls.Add(lblOperario);
@@ -175,7 +191,7 @@ namespace Presentacion_IU
             if (cboObras.SelectedIndex < 0)
                 throw new Exception("Debe seleccionar una obra.");
 
-            return ContextoAplicacion.Obras[cboObras.SelectedIndex];
+            return obras[cboObras.SelectedIndex];
         }
 
         private void btnCrear_Click(object sender, EventArgs e)
@@ -193,6 +209,43 @@ namespace Presentacion_IU
                 {
                     RefrescarCombos();
                     lstEventos.Items.Add("Cuadrilla creada: " + cuadrilla.Nombre);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnModificarCuadrilla_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BEClsCuadrilla cuadrilla = CuadrillaSeleccionada();
+                cuadrilla.Nombre = txtNombre.Text;
+
+                if (bllCuadrilla.ModificarCuadrilla(cuadrilla))
+                {
+                    RefrescarCombos();
+                    lstEventos.Items.Add("Cuadrilla modificada.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnEliminarCuadrilla_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BEClsCuadrilla cuadrilla = CuadrillaSeleccionada();
+
+                if (bllCuadrilla.EliminarCuadrilla(cuadrilla))
+                {
+                    RefrescarCombos();
+                    lstEventos.Items.Add("Cuadrilla eliminada.");
                 }
             }
             catch (Exception ex)
@@ -301,14 +354,28 @@ namespace Presentacion_IU
             foreach (BEClsOperario operario in operarios)
                 cboOperarios.Items.Add(operario.Legajo + " - " + operario.Nombre + " " + operario.Apellido);
 
-            // Obras queda temporalmente con ContextoAplicacion porque FrmObras lo vas a terminar vos.
+            obras = bllObra.ListarTodo();
+
             cboObras.Items.Clear();
-            foreach (BEClsObra obra in ContextoAplicacion.Obras)
+            foreach (BEClsObra obra in obras)
                 cboObras.Items.Add(obra.Codigo + " - " + obra.Nombre);
 
             if (cuadrillaSeleccionada >= 0 && cuadrillaSeleccionada < cboCuadrillas.Items.Count)
                 cboCuadrillas.SelectedIndex = cuadrillaSeleccionada;
 
+            ActualizarEstado();
+        }
+
+        private void cboCuadrillas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboCuadrillas.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            BEClsCuadrilla cuadrilla = cuadrillas[cboCuadrillas.SelectedIndex];
+            txtCodigo.Text = cuadrilla.Codigo.ToString();
+            txtNombre.Text = cuadrilla.Nombre;
             ActualizarEstado();
         }
 

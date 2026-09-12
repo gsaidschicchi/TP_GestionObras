@@ -1,6 +1,7 @@
 ﻿using BE_GestionObras;
 using BLL_GestionObras;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,6 +10,7 @@ namespace Presentacion_IU
     public class FrmOperarios : Form
     {
         private readonly BLLClsOperario bllOperario = new BLLClsOperario();
+        private List<BEClsOperario> operarios = new List<BEClsOperario>();
 
         private TextBox txtIdCodigo;
         private TextBox txtDNI;
@@ -23,7 +25,7 @@ namespace Presentacion_IU
         public FrmOperarios()
         {
             this.Text = "Gestión de Operarios";
-            this.Size = new Size(760, 570);
+            this.Size = new Size(780, 590);
 
             Label titulo = new Label();
             titulo.Text = "Gestión de Operarios";
@@ -44,17 +46,32 @@ namespace Presentacion_IU
             CrearCampo("Sueldo Base:", 360, out txtSueldoBase);
 
             Button btnCrear = new Button();
-            btnCrear.Text = "Crear Operario";
-            btnCrear.Location = new Point(150, 410);
-            btnCrear.Size = new Size(160, 40);
+            btnCrear.Text = "Crear";
+            btnCrear.Location = new Point(30, 420);
+            btnCrear.Size = new Size(100, 40);
             btnCrear.Click += btnCrear_Click;
+
+            Button btnModificar = new Button();
+            btnModificar.Text = "Modificar";
+            btnModificar.Location = new Point(140, 420);
+            btnModificar.Size = new Size(100, 40);
+            btnModificar.Click += btnModificar_Click;
+
+            Button btnEliminar = new Button();
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.Location = new Point(250, 420);
+            btnEliminar.Size = new Size(100, 40);
+            btnEliminar.Click += btnEliminar_Click;
 
             lstOperarios = new ListBox();
             lstOperarios.Location = new Point(380, 80);
-            lstOperarios.Size = new Size(330, 370);
+            lstOperarios.Size = new Size(350, 380);
+            lstOperarios.SelectedIndexChanged += lstOperarios_SelectedIndexChanged;
 
             this.Controls.Add(titulo);
             this.Controls.Add(btnCrear);
+            this.Controls.Add(btnModificar);
+            this.Controls.Add(btnEliminar);
             this.Controls.Add(lstOperarios);
 
             RefrescarLista();
@@ -74,6 +91,16 @@ namespace Presentacion_IU
             this.Controls.Add(textBox);
         }
 
+        private BEClsOperario OperarioSeleccionado()
+        {
+            if (lstOperarios.SelectedIndex < 0)
+            {
+                throw new Exception("Debe seleccionar un operario.");
+            }
+
+            return operarios[lstOperarios.SelectedIndex];
+        }
+
         private void btnCrear_Click(object sender, EventArgs e)
         {
             try
@@ -86,7 +113,6 @@ namespace Presentacion_IU
                     int.Parse(txtLegajo.Text),
                     txtEspecialidad.Text);
 
-                // Nuevos datos definidos en la corrección.
                 operario.IdCodigo = txtIdCodigo.Text;
                 operario.SueldoBase = double.Parse(txtSueldoBase.Text);
 
@@ -95,8 +121,6 @@ namespace Presentacion_IU
                 if (resultado)
                 {
                     RefrescarLista();
-
-                    // Prepara el próximo código automático desde los datos persistidos.
                     txtIdCodigo.Text = bllOperario.GenerarIdCodigo();
 
                     MessageBox.Show("Operario creado correctamente. Sueldo calculado: " +
@@ -109,12 +133,62 @@ namespace Presentacion_IU
             }
         }
 
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BEClsOperario operario = OperarioSeleccionado();
+
+                operario.DNI = txtDNI.Text;
+                operario.Nombre = txtNombre.Text;
+                operario.Apellido = txtApellido.Text;
+                operario.Telefono = txtTelefono.Text;
+                operario.Legajo = int.Parse(txtLegajo.Text);
+                operario.Especialidad = txtEspecialidad.Text;
+                operario.SueldoBase = double.Parse(txtSueldoBase.Text);
+
+                if (bllOperario.ModificarOperario(operario))
+                {
+                    RefrescarLista();
+                    MessageBox.Show("Operario modificado correctamente.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BEClsOperario operario = OperarioSeleccionado();
+
+                if (bllOperario.EliminarOperario(operario))
+                {
+                    RefrescarLista();
+                    txtIdCodigo.Text = bllOperario.GenerarIdCodigo();
+                    MessageBox.Show("Operario eliminado correctamente.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         private void RefrescarLista()
         {
-            if (lstOperarios == null) return;
+            if (lstOperarios == null)
+            {
+                return;
+            }
 
+            operarios = bllOperario.ListarTodo();
             lstOperarios.Items.Clear();
-            foreach (BEClsOperario operario in bllOperario.ListarTodo())
+
+            foreach (BEClsOperario operario in operarios)
             {
                 lstOperarios.Items.Add(
                     operario.IdCodigo + " - " +
@@ -122,6 +196,25 @@ namespace Presentacion_IU
                     operario.Nombre + " " + operario.Apellido +
                     " | Sueldo: " + operario.CalcularSueldo().ToString("0.00"));
             }
+        }
+
+        private void lstOperarios_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstOperarios.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            BEClsOperario operario = operarios[lstOperarios.SelectedIndex];
+
+            txtIdCodigo.Text = operario.IdCodigo;
+            txtDNI.Text = operario.DNI;
+            txtNombre.Text = operario.Nombre;
+            txtApellido.Text = operario.Apellido;
+            txtTelefono.Text = operario.Telefono;
+            txtLegajo.Text = operario.Legajo.ToString();
+            txtEspecialidad.Text = operario.Especialidad;
+            txtSueldoBase.Text = operario.SueldoBase.ToString();
         }
     }
 }

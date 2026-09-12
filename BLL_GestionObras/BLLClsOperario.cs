@@ -30,6 +30,29 @@ namespace BLL_GestionObras
             return mpp.ListarTodo();
         }
 
+
+        public bool ModificarOperario(BEClsOperario operario)
+        {
+            if (operario == null)
+            {
+                throw new Exception("El operario no puede ser nulo.");
+            }
+
+            MPPClsOperario mpp = new MPPClsOperario();
+            return mpp.ModificarOperario(operario);
+        }
+
+        public bool EliminarOperario(BEClsOperario operario)
+        {
+            if (operario == null)
+            {
+                throw new Exception("El operario no puede ser nulo.");
+            }
+
+            MPPClsOperario mpp = new MPPClsOperario();
+            return mpp.EliminarOperario(operario);
+        }
+
         public string GenerarIdCodigo()
         {
             MPPClsOperario mpp = new MPPClsOperario();

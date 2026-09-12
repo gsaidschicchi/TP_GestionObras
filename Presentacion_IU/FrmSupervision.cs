@@ -1,6 +1,7 @@
-using BE_GestionObras;
+﻿using BE_GestionObras;
 using BLL_GestionObras;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,6 +10,8 @@ namespace Presentacion_IU
     public class FrmSupervision : Form
     {
         private readonly BLLClsSupervisor bllSupervisor = new BLLClsSupervisor();
+        private readonly BLLClsObra bllObra = new BLLClsObra();
+        private List<BEClsObra> obras = new List<BEClsObra>();
         private ComboBox cboObras;
         private Label lblEstado;
         private ListBox lstEventos;
@@ -72,7 +75,7 @@ namespace Presentacion_IU
             if (cboObras.SelectedIndex < 0)
                 throw new Exception("Debe seleccionar una obra.");
 
-            return ContextoAplicacion.Obras[cboObras.SelectedIndex];
+            return obras[cboObras.SelectedIndex];
         }
 
         private void btnAprobar_Click(object sender, EventArgs e)
@@ -107,8 +110,10 @@ namespace Presentacion_IU
         {
             int seleccion = cboObras == null ? -1 : cboObras.SelectedIndex;
 
+            obras = bllObra.ListarTodo();
+
             cboObras.Items.Clear();
-            foreach (BEClsObra obra in ContextoAplicacion.Obras)
+            foreach (BEClsObra obra in obras)
                 cboObras.Items.Add(obra.Codigo + " - " + obra.Nombre);
 
             if (seleccion >= 0 && seleccion < cboObras.Items.Count)
@@ -125,7 +130,7 @@ namespace Presentacion_IU
                 return;
             }
 
-            BEClsObra obra = ContextoAplicacion.Obras[cboObras.SelectedIndex];
+            BEClsObra obra = obras[cboObras.SelectedIndex];
             lblEstado.Text = "Estado Obra: " + obra.Estado +
                              " | Informada: " + (obra.InformadaAlSupervisor ? "SI" : "NO") +
                              " | Supervisión: " + obra.EstadoSupervision;

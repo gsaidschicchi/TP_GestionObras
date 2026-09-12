@@ -47,9 +47,16 @@
     <Compile Include="BEClsOperario.cs" />
     <Compile Include="BEClsPersona.cs" />
     <Compile Include="BEClsSupervisor.cs" />
+    <Compile Include="BEClsUsuario.cs" />
     <Compile Include="EstadoObra.cs" />
     <Compile Include="EstadoSupervision.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Security_GestionObras\Security_GestionObras.csproj">
+      <Project>{af3c89bb-314d-4b9c-806b-7423c1e51864}</Project>
+      <Name>Security_GestionObras</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F3994CFB-2350-4905-97DD-FE7294BB560B}</ProjectGuid>
+    <ProjectGuid>{AF3C89BB-314D-4B9C-806B-7423C1E51864}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BLL_GestionObras</RootNamespace>
-    <AssemblyName>BLL_GestionObras</AssemblyName>
+    <RootNamespace>Security_GestionObras</RootNamespace>
+    <AssemblyName>Security_GestionObras</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,27 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLLClsContratista.cs" />
-    <Compile Include="BLLClsCuadrilla.cs" />
-    <Compile Include="BLLClsObra.cs" />
-    <Compile Include="BLLClsOperario.cs" />
-    <Compile Include="BLLClsSupervisor.cs" />
-    <Compile Include="BLLClsUsuario.cs" />
+    <Compile Include="ClsEncriptar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BE_GestionObras\BE_GestionObras.csproj">
-      <Project>{18946e69-bb6e-47f8-a89a-eb9e86e818a2}</Project>
-      <Name>BE_GestionObras</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MPP_GestionObras\MPP_GestionObras.csproj">
-      <Project>{647e8267-f734-481d-a871-56c58e087b12}</Project>
-      <Name>MPP_GestionObras</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Security_GestionObras\Security_GestionObras.csproj">
-      <Project>{af3c89bb-314d-4b9c-806b-7423c1e51864}</Project>
-      <Name>Security_GestionObras</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

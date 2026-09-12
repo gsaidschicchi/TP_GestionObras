@@ -1,4 +1,4 @@
-﻿using BE_GestionObras;
+using BE_GestionObras;
 using BLL_GestionObras;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,11 @@ namespace Presentacion_IU
     {
         private readonly BLLClsContratista bllContratista = new BLLClsContratista();
         private readonly BLLClsCuadrilla bllCuadrilla = new BLLClsCuadrilla();
+        private readonly BLLClsObra bllObra = new BLLClsObra();
 
+        private List<BEClsContratista> contratistas = new List<BEClsContratista>();
         private List<BEClsCuadrilla> cuadrillas = new List<BEClsCuadrilla>();
+        private List<BEClsObra> obras = new List<BEClsObra>();
 
         private TextBox txtCUIT;
         private TextBox txtRazonSocial;
@@ -24,7 +27,7 @@ namespace Presentacion_IU
         public FrmContratistas()
         {
             this.Text = "Gestión de Contratistas";
-            this.Size = new Size(800, 560);
+            this.Size = new Size(820, 600);
 
             Label titulo = new Label();
             titulo.Text = "Gestión de Contratistas";
@@ -51,69 +54,82 @@ namespace Presentacion_IU
             Button btnCrear = new Button();
             btnCrear.Text = "Crear Contratista";
             btnCrear.Location = new Point(400, 82);
-            btnCrear.Size = new Size(160, 60);
+            btnCrear.Size = new Size(150, 30);
             btnCrear.Click += btnCrear_Click;
+
+            Button btnModificar = new Button();
+            btnModificar.Text = "Modificar";
+            btnModificar.Location = new Point(560, 82);
+            btnModificar.Size = new Size(100, 30);
+            btnModificar.Click += btnModificar_Click;
+
+            Button btnEliminar = new Button();
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.Location = new Point(670, 82);
+            btnEliminar.Size = new Size(100, 30);
+            btnEliminar.Click += btnEliminar_Click;
 
             Label lblContratista = new Label();
             lblContratista.Text = "Contratista:";
-            lblContratista.Location = new Point(30, 200);
+            lblContratista.Location = new Point(30, 180);
 
             cboContratistas = new ComboBox();
             cboContratistas.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboContratistas.Location = new Point(150, 197);
-            cboContratistas.Width = 260;
+            cboContratistas.Location = new Point(150, 177);
+            cboContratistas.Width = 300;
+            cboContratistas.SelectedIndexChanged += cboContratistas_SelectedIndexChanged;
 
             Label lblCuadrilla = new Label();
             lblCuadrilla.Text = "Cuadrilla:";
-            lblCuadrilla.Location = new Point(30, 240);
+            lblCuadrilla.Location = new Point(30, 230);
 
             cboCuadrillas = new ComboBox();
             cboCuadrillas.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboCuadrillas.Location = new Point(150, 237);
+            cboCuadrillas.Location = new Point(150, 227);
             cboCuadrillas.Width = 260;
 
             Button btnAgregar = new Button();
             btnAgregar.Text = "Agregar Cuadrilla";
-            btnAgregar.Location = new Point(440, 235);
+            btnAgregar.Location = new Point(440, 225);
             btnAgregar.Size = new Size(145, 30);
             btnAgregar.Click += btnAgregar_Click;
 
             Button btnQuitar = new Button();
             btnQuitar.Text = "Quitar Cuadrilla";
-            btnQuitar.Location = new Point(600, 235);
+            btnQuitar.Location = new Point(600, 225);
             btnQuitar.Size = new Size(145, 30);
             btnQuitar.Click += btnQuitar_Click;
 
             Label lblObra = new Label();
             lblObra.Text = "Obra:";
-            lblObra.Location = new Point(30, 280);
+            lblObra.Location = new Point(30, 275);
 
             cboObras = new ComboBox();
             cboObras.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboObras.Location = new Point(150, 277);
+            cboObras.Location = new Point(150, 272);
             cboObras.Width = 260;
 
             Button btnAsignar = new Button();
             btnAsignar.Text = "Asignar Obra a Cuadrilla";
-            btnAsignar.Location = new Point(440, 275);
+            btnAsignar.Location = new Point(440, 270);
             btnAsignar.Size = new Size(200, 30);
             btnAsignar.Click += btnAsignar_Click;
 
             Button btnRecibir = new Button();
             btnRecibir.Text = "Recibir Finalización";
-            btnRecibir.Location = new Point(150, 330);
+            btnRecibir.Location = new Point(150, 325);
             btnRecibir.Size = new Size(170, 35);
             btnRecibir.Click += btnRecibir_Click;
 
             Button btnInformar = new Button();
             btnInformar.Text = "Informar al Supervisor";
-            btnInformar.Location = new Point(340, 330);
+            btnInformar.Location = new Point(340, 325);
             btnInformar.Size = new Size(180, 35);
             btnInformar.Click += btnInformar_Click;
 
             lstEventos = new ListBox();
             lstEventos.Location = new Point(30, 400);
-            lstEventos.Size = new Size(715, 100);
+            lstEventos.Size = new Size(715, 120);
 
             this.Controls.Add(titulo);
             this.Controls.Add(lblCUIT);
@@ -121,6 +137,8 @@ namespace Presentacion_IU
             this.Controls.Add(lblRazon);
             this.Controls.Add(txtRazonSocial);
             this.Controls.Add(btnCrear);
+            this.Controls.Add(btnModificar);
+            this.Controls.Add(btnEliminar);
             this.Controls.Add(lblContratista);
             this.Controls.Add(cboContratistas);
             this.Controls.Add(lblCuadrilla);
@@ -141,15 +159,19 @@ namespace Presentacion_IU
         private BEClsContratista ContratistaSeleccionada()
         {
             if (cboContratistas.SelectedIndex < 0)
+            {
                 throw new Exception("Debe seleccionar una contratista.");
+            }
 
-            return ContextoAplicacion.Contratistas[cboContratistas.SelectedIndex];
+            return contratistas[cboContratistas.SelectedIndex];
         }
 
         private BEClsCuadrilla CuadrillaSeleccionada()
         {
             if (cboCuadrillas.SelectedIndex < 0)
+            {
                 throw new Exception("Debe seleccionar una cuadrilla.");
+            }
 
             return cuadrillas[cboCuadrillas.SelectedIndex];
         }
@@ -157,9 +179,11 @@ namespace Presentacion_IU
         private BEClsObra ObraSeleccionada()
         {
             if (cboObras.SelectedIndex < 0)
+            {
                 throw new Exception("Debe seleccionar una obra.");
+            }
 
-            return ContextoAplicacion.Obras[cboObras.SelectedIndex];
+            return obras[cboObras.SelectedIndex];
         }
 
         private void btnCrear_Click(object sender, EventArgs e)
@@ -167,9 +191,14 @@ namespace Presentacion_IU
             try
             {
                 BEClsContratista contratista = new BEClsContratista(txtCUIT.Text, txtRazonSocial.Text);
-                ContextoAplicacion.Contratistas.Add(contratista);
-                RefrescarCombos();
-                lstEventos.Items.Add("Contratista creada: " + contratista.RazonSocial);
+
+                bool resultado = bllContratista.CrearContratista(contratista);
+
+                if (resultado)
+                {
+                    RefrescarCombos();
+                    lstEventos.Items.Add("Contratista creada: " + contratista.RazonSocial);
+                }
             }
             catch (Exception ex)
             {
@@ -177,11 +206,61 @@ namespace Presentacion_IU
             }
         }
 
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BEClsContratista contratista = ContratistaSeleccionada();
+                contratista.RazonSocial = txtRazonSocial.Text;
+
+                if (bllContratista.ModificarContratista(contratista))
+                {
+                    RefrescarCombos();
+                    lstEventos.Items.Add("Contratista modificada.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BEClsContratista contratista = ContratistaSeleccionada();
+
+                if (bllContratista.EliminarContratista(contratista))
+                {
+                    RefrescarCombos();
+                    lstEventos.Items.Add("Contratista eliminada.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void cboContratistas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboContratistas.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            BEClsContratista contratista = contratistas[cboContratistas.SelectedIndex];
+            txtCUIT.Text = contratista.CUIT;
+            txtRazonSocial.Text = contratista.RazonSocial;
+        }
+
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             try
             {
                 bllContratista.AgregarCuadrilla(ContratistaSeleccionada(), CuadrillaSeleccionada());
+                RefrescarCombos();
                 lstEventos.Items.Add("Cuadrilla agregada a la contratista.");
             }
             catch (Exception ex)
@@ -195,6 +274,7 @@ namespace Presentacion_IU
             try
             {
                 bllContratista.QuitarCuadrilla(ContratistaSeleccionada(), CuadrillaSeleccionada());
+                RefrescarCombos();
                 lstEventos.Items.Add("Cuadrilla quitada de la contratista.");
             }
             catch (Exception ex)
@@ -212,6 +292,7 @@ namespace Presentacion_IU
                     CuadrillaSeleccionada(),
                     ObraSeleccionada());
 
+                RefrescarCombos();
                 lstEventos.Items.Add("Obra asignada a la cuadrilla por la contratista.");
             }
             catch (Exception ex)
@@ -238,6 +319,7 @@ namespace Presentacion_IU
             try
             {
                 bllContratista.InformarFinalizacionAlSupervisor(ObraSeleccionada());
+                RefrescarCombos();
                 lstEventos.Items.Add("La contratista informó la obra al Supervisor.");
             }
             catch (Exception ex)
@@ -248,19 +330,27 @@ namespace Presentacion_IU
 
         private void RefrescarCombos()
         {
-            cboContratistas.Items.Clear();
-            foreach (BEClsContratista contratista in ContextoAplicacion.Contratistas)
-                cboContratistas.Items.Add(contratista.CUIT + " - " + contratista.RazonSocial);
-
+            contratistas = bllContratista.ListarTodo();
             cuadrillas = bllCuadrilla.ListarTodo();
+            obras = bllObra.ListarTodo();
+
+            cboContratistas.Items.Clear();
+            foreach (BEClsContratista contratista in contratistas)
+            {
+                cboContratistas.Items.Add(contratista.CUIT + " - " + contratista.RazonSocial);
+            }
 
             cboCuadrillas.Items.Clear();
             foreach (BEClsCuadrilla cuadrilla in cuadrillas)
+            {
                 cboCuadrillas.Items.Add(cuadrilla.Codigo + " - " + cuadrilla.Nombre);
+            }
 
             cboObras.Items.Clear();
-            foreach (BEClsObra obra in ContextoAplicacion.Obras)
+            foreach (BEClsObra obra in obras)
+            {
                 cboObras.Items.Add(obra.Codigo + " - " + obra.Nombre);
+            }
         }
     }
 }

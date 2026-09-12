@@ -1,4 +1,5 @@
 ﻿using BE_GestionObras;
+using MPP_GestionObras;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +7,65 @@ namespace BLL_GestionObras
 {
     public class BLLClsContratista
     {
-        // METODOS
+        public bool CrearContratista(BEClsContratista contratista)
+        {
+            if (contratista == null)
+            {
+                throw new Exception("La contratista no puede ser nula.");
+            }
+
+            if (string.IsNullOrWhiteSpace(contratista.CUIT))
+            {
+                throw new Exception("La contratista debe tener CUIT.");
+            }
+
+            if (string.IsNullOrWhiteSpace(contratista.RazonSocial))
+            {
+                throw new Exception("La contratista debe tener razón social.");
+            }
+
+            MPPClsContratista mpp = new MPPClsContratista();
+
+            if (mpp.BuscarContratista(contratista))
+            {
+                throw new Exception("La contratista ya se encuentra dada de alta.");
+            }
+
+            return mpp.CrearContratista(contratista);
+        }
+
+        public List<BEClsContratista> ListarTodo()
+        {
+            MPPClsContratista mpp = new MPPClsContratista();
+            return mpp.ListarTodo();
+        }
+
+        public bool ModificarContratista(BEClsContratista contratista)
+        {
+            if (contratista == null)
+            {
+                throw new Exception("La contratista no puede ser nula.");
+            }
+
+            MPPClsContratista mpp = new MPPClsContratista();
+            return mpp.ModificarContratista(contratista);
+        }
+
+        public bool EliminarContratista(BEClsContratista contratista)
+        {
+            if (contratista == null)
+            {
+                throw new Exception("La contratista no puede ser nula.");
+            }
+
+            if (contratista.Cuadrillas.Count > 0)
+            {
+                throw new Exception("No se puede eliminar una contratista que tiene cuadrillas asignadas.");
+            }
+
+            MPPClsContratista mpp = new MPPClsContratista();
+            return mpp.EliminarContratista(contratista);
+        }
 
         public List<BEClsCuadrilla> AgregarCuadrilla(
             BEClsContratista contratista,
@@ -22,18 +81,21 @@ namespace BLL_GestionObras
                 throw new Exception("La cuadrilla no puede ser nula.");
             }
 
-            if (!BuscarCuadrilla(contratista, cuadrilla))
-            {
-                contratista.Cuadrillas.Add(cuadrilla);
-            }
-            else
+            if (BuscarCuadrilla(contratista, cuadrilla))
             {
                 throw new Exception("La cuadrilla ya está incorporada.");
             }
 
+            MPPClsContratista mpp = new MPPClsContratista();
+            bool resultado = mpp.AgregarCuadrilla(contratista, cuadrilla);
+
+            if (resultado)
+            {
+                contratista.Cuadrillas.Add(cuadrilla);
+            }
+
             return contratista.Cuadrillas;
         }
-
 
         public List<BEClsCuadrilla> QuitarCuadrilla(
             BEClsContratista contratista,
@@ -49,18 +111,34 @@ namespace BLL_GestionObras
                 throw new Exception("La cuadrilla no puede ser nula.");
             }
 
-            if (BuscarCuadrilla(contratista, cuadrilla))
-            {
-                contratista.Cuadrillas.Remove(cuadrilla);
-            }
-            else
+            if (!BuscarCuadrilla(contratista, cuadrilla))
             {
                 throw new Exception("La cuadrilla no se encuentra en el listado.");
             }
 
+            MPPClsContratista mpp = new MPPClsContratista();
+            bool resultado = mpp.QuitarCuadrilla(cuadrilla);
+
+            if (resultado)
+            {
+                BEClsCuadrilla cuadrillaAEliminar = null;
+
+                foreach (BEClsCuadrilla item in contratista.Cuadrillas)
+                {
+                    if (item.Codigo == cuadrilla.Codigo)
+                    {
+                        cuadrillaAEliminar = item;
+                    }
+                }
+
+                if (cuadrillaAEliminar != null)
+                {
+                    contratista.Cuadrillas.Remove(cuadrillaAEliminar);
+                }
+            }
+
             return contratista.Cuadrillas;
         }
-
 
         public void AsignarObraACuadrilla(
             BEClsContratista contratista,
@@ -84,12 +162,7 @@ namespace BLL_GestionObras
 
             if (BuscarCuadrilla(contratista, cuadrilla))
             {
-                // Se crea una instancia de la capa de negocio de Cuadrilla
-                // para utilizar sus reglas y métodos.
                 BLLClsCuadrilla bllCuadrilla = new BLLClsCuadrilla();
-
-                // Se delega la asignación de la obra a BLLClsCuadrilla,
-                // evitando repetir la lógica de negocio.
                 bllCuadrilla.AsignarObra(cuadrilla, obra);
             }
             else
@@ -97,7 +170,6 @@ namespace BLL_GestionObras
                 throw new Exception("La cuadrilla no se encuentra en el listado.");
             }
         }
-
 
         public void RecibirFinalizacionObra(BEClsObra obra)
         {
@@ -108,11 +180,9 @@ namespace BLL_GestionObras
 
             if (obra.Estado != EstadoObra.FINALIZADA)
             {
-                throw new Exception(
-                    "La obra todavía no fue informada como finalizada por la cuadrilla.");
+                throw new Exception("La obra todavía no fue informada como finalizada por la cuadrilla.");
             }
         }
-
 
         public void InformarFinalizacionAlSupervisor(BEClsObra obra)
         {
@@ -126,21 +196,11 @@ namespace BLL_GestionObras
                 throw new Exception("La obra todavía no se encuentra finalizada.");
             }
 
-            // Se registra que la contratista ya informó
-            // la finalización al Supervisor.
             obra.InformadaAlSupervisor = true;
 
-            // Se crea una instancia de la lógica de negocio de Obra.
             BLLClsObra bllObra = new BLLClsObra();
-
-            // La obra queda pendiente de supervisión.
-            bllObra.CambiarEstadoSupervision(
-                obra,
-                EstadoSupervision.PENDIENTE);
+            bllObra.CambiarEstadoSupervision(obra, EstadoSupervision.PENDIENTE);
         }
-
-
-        // METODOS AUXILIARES
 
         public bool BuscarCuadrilla(
             BEClsContratista contratista,
@@ -160,7 +220,7 @@ namespace BLL_GestionObras
 
             foreach (BEClsCuadrilla c in contratista.Cuadrillas)
             {
-                if (c == cuadrilla)
+                if (c.Codigo == cuadrilla.Codigo)
                 {
                     encontrada = true;
                     break;

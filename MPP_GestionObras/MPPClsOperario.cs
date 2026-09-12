@@ -66,6 +66,36 @@ namespace MPP_GestionObras
             return acceso.Escribir(consulta);
         }
 
+
+        public bool ModificarOperario(BEClsOperario operario)
+        {
+            DALAcceso acceso = new DALAcceso();
+
+            string consulta =
+                "UPDATE Operario " +
+                "SET DNI = '" + operario.DNI + "', " +
+                "Nombre = '" + operario.Nombre + "', " +
+                "Apellido = '" + operario.Apellido + "', " +
+                "Telefono = '" + operario.Telefono + "', " +
+                "SueldoBase = " + operario.SueldoBase + ", " +
+                "Legajo = " + operario.Legajo + ", " +
+                "Especialidad = '" + operario.Especialidad + "' " +
+                "WHERE IdCodigo = '" + operario.IdCodigo + "'";
+
+            return acceso.Escribir(consulta);
+        }
+
+        public bool EliminarOperario(BEClsOperario operario)
+        {
+            DALAcceso acceso = new DALAcceso();
+
+            string consulta =
+                "DELETE FROM Operario " +
+                "WHERE IdCodigo = '" + operario.IdCodigo + "'";
+
+            return acceso.Escribir(consulta);
+        }
+
         public bool BuscarOperario(BEClsOperario operario)
         {
             DALAcceso acceso = new DALAcceso();

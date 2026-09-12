@@ -4,4 +4,5 @@
   <Project Path="DAL_GestionObras/DAL_GestionObras.csproj" Id="9a9bb6be-bc78-4e7f-aa5c-76fb66f9cb7a" />
   <Project Path="MPP_GestionObras/MPP_GestionObras.csproj" Id="647e8267-f734-481d-a871-56c58e087b12" />
   <Project Path="Presentacion_IU/Presentacion_IU.csproj" Id="bc46f154-1afa-46f7-ac53-ec73ea6f35a8" />
+  <Project Path="Security_GestionObras/Security_GestionObras.csproj" Id="af3c89bb-314d-4b9c-806b-7423c1e51864" />
 </Solution>

@@ -135,6 +135,50 @@ namespace MPP_GestionObras
             }
         }
 
+
+        public List<BEClsCuadrilla> ListarPorContratista(string cuit)
+        {
+            DALAcceso acceso = new DALAcceso();
+
+            string consulta =
+                "SELECT Codigo, Nombre, CodigoObra FROM Cuadrilla " +
+                "WHERE CUITContratista = '" + cuit + "'";
+
+            DataTable tabla = acceso.Leer(consulta);
+            List<BEClsCuadrilla> cuadrillas = new List<BEClsCuadrilla>();
+
+            foreach (DataRow fila in tabla.Rows)
+            {
+                BEClsCuadrilla cuadrilla = MapearCuadrilla(fila);
+                cuadrillas.Add(cuadrilla);
+            }
+
+            return cuadrillas;
+        }
+
+        public bool ModificarCuadrilla(BEClsCuadrilla cuadrilla)
+        {
+            DALAcceso acceso = new DALAcceso();
+
+            string consulta =
+                "UPDATE Cuadrilla " +
+                "SET Nombre = '" + cuadrilla.Nombre + "' " +
+                "WHERE Codigo = " + cuadrilla.Codigo;
+
+            return acceso.Escribir(consulta);
+        }
+
+        public bool EliminarCuadrilla(BEClsCuadrilla cuadrilla)
+        {
+            DALAcceso acceso = new DALAcceso();
+
+            string consulta =
+                "DELETE FROM Cuadrilla " +
+                "WHERE Codigo = " + cuadrilla.Codigo;
+
+            return acceso.Escribir(consulta);
+        }
+
         public bool AgregarOperario(BEClsCuadrilla cuadrilla, BEClsOperario operario)
         {
             DALAcceso acceso = new DALAcceso();

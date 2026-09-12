@@ -25,12 +25,14 @@ namespace Presentacion_IU
             ToolStripMenuItem itemCuadrillas = new ToolStripMenuItem("Cuadrillas");
             ToolStripMenuItem itemOperarios = new ToolStripMenuItem("Operarios");
             ToolStripMenuItem itemObras = new ToolStripMenuItem("Obras");
+            ToolStripMenuItem itemSupervisores = new ToolStripMenuItem("Supervisores");
             ToolStripMenuItem itemSupervision = new ToolStripMenuItem("Supervisión de Obras");
 
             itemContratistas.Click += (s, e) => AbrirFormulario(new FrmContratistas());
             itemCuadrillas.Click += (s, e) => AbrirFormulario(new FrmCuadrillas());
             itemOperarios.Click += (s, e) => AbrirFormulario(new FrmOperarios());
             itemObras.Click += (s, e) => AbrirFormulario(new FrmObras());
+            itemSupervisores.Click += (s, e) => AbrirFormulario(new FrmSupervisores());
             itemSupervision.Click += (s, e) => AbrirFormulario(new FrmSupervision());
 
             menuArchivo.DropDownItems.Add(itemSalir);
@@ -39,6 +41,7 @@ namespace Presentacion_IU
             menuGestion.DropDownItems.Add(itemCuadrillas);
             menuGestion.DropDownItems.Add(itemOperarios);
             menuGestion.DropDownItems.Add(itemObras);
+            menuGestion.DropDownItems.Add(itemSupervisores);
 
             menuSupervision.DropDownItems.Add(itemSupervision);
 

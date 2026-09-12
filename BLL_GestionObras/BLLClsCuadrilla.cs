@@ -29,6 +29,39 @@ namespace BLL_GestionObras
             return mpp.CrearCuadrilla(cuadrilla);
         }
 
+
+        public bool ModificarCuadrilla(BEClsCuadrilla cuadrilla)
+        {
+            if (cuadrilla == null)
+            {
+                throw new Exception("La cuadrilla no puede ser nula.");
+            }
+
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
+            return mpp.ModificarCuadrilla(cuadrilla);
+        }
+
+        public bool EliminarCuadrilla(BEClsCuadrilla cuadrilla)
+        {
+            if (cuadrilla == null)
+            {
+                throw new Exception("La cuadrilla no puede ser nula.");
+            }
+
+            if (cuadrilla.Operarios.Count > 0)
+            {
+                throw new Exception("No se puede eliminar una cuadrilla que tiene operarios asignados.");
+            }
+
+            if (cuadrilla.ObraAsignada != null)
+            {
+                throw new Exception("No se puede eliminar una cuadrilla que tiene una obra asignada.");
+            }
+
+            MPPClsCuadrilla mpp = new MPPClsCuadrilla();
+            return mpp.EliminarCuadrilla(cuadrilla);
+        }
+
         public List<BEClsOperario> AgregarOperario(BEClsCuadrilla cuadrilla, BEClsOperario operario)
         {
             if (cuadrilla == null)

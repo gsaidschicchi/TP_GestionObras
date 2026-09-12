@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -52,6 +52,12 @@
     <Compile Include="FrmCuadrillas.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmObras.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,14 +67,19 @@
     <Compile Include="FrmPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FrmSupervisores.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FrmSupervision.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ContextoAplicacion.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmCuadrillas.resx">
       <DependentUpon>FrmCuadrillas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -100,6 +111,10 @@
     <ProjectReference Include="..\BLL_GestionObras\BLL_GestionObras.csproj">
       <Project>{f3994cfb-2350-4905-97dd-fe7294bb560b}</Project>
       <Name>BLL_GestionObras</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Security_GestionObras\Security_GestionObras.csproj">
+      <Project>{af3c89bb-314d-4b9c-806b-7423c1e51864}</Project>
+      <Name>Security_GestionObras</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

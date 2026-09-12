@@ -1,16 +1,57 @@
 ﻿using BE_GestionObras;
+using MPP_GestionObras;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace BLL_GestionObras
 {
     public class BLLClsSupervisor
     {
-        // METODOS
+        public bool CrearSupervisor(BEClsSupervisor supervisor)
+        {
+            if (supervisor == null)
+            {
+                throw new Exception("El supervisor no puede ser nulo.");
+            }
+
+            MPPClsSupervisor mpp = new MPPClsSupervisor();
+
+            if (mpp.BuscarSupervisor(supervisor))
+            {
+                throw new Exception("El supervisor ya se encuentra dado de alta.");
+            }
+
+            return mpp.CrearSupervisor(supervisor);
+        }
+
+        public List<BEClsSupervisor> ListarTodo()
+        {
+            MPPClsSupervisor mpp = new MPPClsSupervisor();
+            return mpp.ListarTodo();
+        }
+
+        public bool ModificarSupervisor(BEClsSupervisor supervisor)
+        {
+            if (supervisor == null)
+            {
+                throw new Exception("El supervisor no puede ser nulo.");
+            }
+
+            MPPClsSupervisor mpp = new MPPClsSupervisor();
+            return mpp.ModificarSupervisor(supervisor);
+        }
+
+        public bool EliminarSupervisor(BEClsSupervisor supervisor)
+        {
+            if (supervisor == null)
+            {
+                throw new Exception("El supervisor no puede ser nulo.");
+            }
+
+            MPPClsSupervisor mpp = new MPPClsSupervisor();
+            return mpp.EliminarSupervisor(supervisor);
+        }
+
         public void SupervisarObra(BEClsObra obra)
         {
             if (obra == null)
@@ -39,7 +80,6 @@ namespace BLL_GestionObras
             SupervisarObra(obra);
 
             BLLClsObra bllObra = new BLLClsObra();
-
             bllObra.CambiarEstadoSupervision(obra, EstadoSupervision.APROBADO);
         }
 
@@ -48,7 +88,6 @@ namespace BLL_GestionObras
             SupervisarObra(obra);
 
             BLLClsObra bllObra = new BLLClsObra();
-
             bllObra.CambiarEstadoSupervision(obra, EstadoSupervision.RECHAZADO);
         }
     }

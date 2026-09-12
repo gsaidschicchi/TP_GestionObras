@@ -10,6 +10,29 @@ namespace BLL_GestionObras
 {
     public class BLLClsObra
     {
+        public bool CrearObra(BEClsObra obra)
+        {
+            if (obra == null)
+            {
+                throw new Exception("La obra no puede ser nula.");
+            }
+
+            MPPClsObra mpp = new MPPClsObra();
+
+            if (mpp.BuscarObra(obra))
+            {
+                throw new Exception("La obra ya se encuentra dada de alta.");
+            }
+
+            return mpp.CrearObra(obra);
+        }
+
+        public List<BEClsObra> ListarTodo()
+        {
+            MPPClsObra mpp = new MPPClsObra();
+            return mpp.ListarObras();
+        }
+
         public bool CambiarEstadoObra(BEClsObra obra, EstadoObra nuevoEstado)
         {
             obra.Estado = nuevoEstado;
